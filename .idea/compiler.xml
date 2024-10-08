@@ -9,11 +9,13 @@
         <module name="produto-service" />
         <module name="saudacao-service" />
         <module name="config-service" />
+        <module name="cambio-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="cambio-service" options="-parameters" />
       <module name="config-service" options="-parameters" />
       <module name="produto-service" options="-parameters" />
       <module name="saudacao-service" options="-parameters" />
