@@ -25,7 +25,8 @@ public class CambioEntity {
     @Transient
     private double valorConvertido; // Não será persistido no banco de dados
 
-    public CambioEntity() {}
+    public CambioEntity() {
+    }
 
     public CambioEntity(String origem, String destino, double fator, String ambiente, double valorConvertido) {
         this.origem = origem;
