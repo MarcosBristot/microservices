@@ -1,87 +1,76 @@
 package br.edu.atitus.paradigma.cambio_service.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "cambio")
 public class CambioEntity {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
+	private String origem;
+	private String destino;
+	private double fator;
+	
+	@Transient
+	private String ambiente;
+	@Transient
+	private double valorConvertido;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	public Integer getId() {
+		return id;
+	}
 
-    @Column(nullable = false, length = 3)
-    private String origem;
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    @Column(nullable = false, length = 3)
-    private String destino;
+	public String getOrigem() {
+		return origem;
+	}
 
-    @Column(nullable = false)
-    private double fator;
+	public void setOrigem(String origem) {
+		this.origem = origem;
+	}
 
-    @Transient
-    private String ambiente; // Não será persistido no banco de dados
+	public String getDestino() {
+		return destino;
+	}
 
-    @Transient
-    private double valorConvertido; // Não será persistido no banco de dados
+	public void setDestino(String destino) {
+		this.destino = destino;
+	}
 
-    public CambioEntity() {
-    }
+	public double getFator() {
+		return fator;
+	}
 
-    public CambioEntity(String origem, String destino, double fator, String ambiente, double valorConvertido) {
-        this.origem = origem;
-        this.destino = destino;
-        this.fator = fator;
-        this.ambiente = ambiente;
-        this.valorConvertido = valorConvertido;
-    }
+	public void setFator(double fator) {
+		this.fator = fator;
+	}
 
-    // Getters e Setters
-    public Integer getId() {
-        return id;
-    }
+	public String getAmbiente() {
+		return ambiente;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setAmbiente(String ambiente) {
+		this.ambiente = ambiente;
+	}
 
-    public String getOrigem() {
-        return origem;
-    }
+	public double getValorConvertido() {
+		return valorConvertido;
+	}
 
-    public void setOrigem(String origem) {
-        this.origem = origem;
-    }
+	public void setValorConvertido(double valorConvertido) {
+		this.valorConvertido = valorConvertido;
+	}
 
-    public String getDestino() {
-        return destino;
-    }
-
-    public void setDestino(String destino) {
-        this.destino = destino;
-    }
-
-    public double getFator() {
-        return fator;
-    }
-
-    public void setFator(double fator) {
-        this.fator = fator;
-    }
-
-    public String getAmbiente() {
-        return ambiente;
-    }
-
-    public void setAmbiente(String ambiente) {
-        this.ambiente = ambiente;
-    }
-
-    public double getValorConvertido() {
-        return valorConvertido;
-    }
-
-    public void setValorConvertido(double valorConvertido) {
-        this.valorConvertido = valorConvertido;
-    }
+	
 }
