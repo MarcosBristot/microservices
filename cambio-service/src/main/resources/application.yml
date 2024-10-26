@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost/cambio_service
     username: postgres
-    password: Werner318.
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: none
