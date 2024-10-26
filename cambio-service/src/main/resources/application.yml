@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost/cambio_service
     username: postgres
-    password: postgres
+    password: Werner318.
   jpa:
     hibernate:
       ddl-auto: none
@@ -21,18 +21,21 @@ spring:
     type: caffeine
     caffeine:
       spec: maximumSize=500,expireAfterWrite=10m
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    healthcheck:
+      enabled: true
+  instance:
+    prefer-ip-address: true
+
 management:
   endpoints:
     web:
       exposure:
         include:
-        - '*'
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    prefer-ip-address: true
+          - '*'
 resilience4j:
   circuitbreaker:
     instances:
