@@ -35,12 +35,13 @@ public class CambioController {
 	private int porta;
 
 	@GetMapping("/{valor}/{origem}/{destino}")
-	@CircuitBreaker(name = "cotacaoClient", fallbackMethod = "getCambioFromLocal")
-	public ResponseEntity<CambioEntity> getCambio(@PathVariable double valor, @PathVariable String origem,
+	@CircuitBreaker(name = "cotacaoClient", fallbackMethod = "getCambioFromDB")
+	public ResponseEntity<CambioEntity> getCambio(
+			@PathVariable double valor,
+			@PathVariable String origem,
 			@PathVariable String destino) throws Exception {
 
-		CambioEntity cambio = cacheManager.getCache("cambioCache")
-				.get(origem + destino, CambioEntity.class);
+		CambioEntity cambio = cacheManager.getCache("cambioCache").get(origem + destino, CambioEntity.class);
 		if (cambio == null) {
 			cambio = getCambioFromBC(origem, destino);
 			cacheManager.getCache("cambioCache").put(origem+destino, cambio);
@@ -51,17 +52,19 @@ public class CambioController {
 		return ResponseEntity.ok(cambio);
 	}
 
-	public ResponseEntity<CambioEntity> getCambioFromLocal(double valor, String origem, String destino, Throwable e) throws Exception {
+	public ResponseEntity<CambioEntity> getCambioFromDB(
+			double valor,
+			String origem,
+			String destino,
+			Throwable e) throws Exception {
 		CambioEntity cambio = cambioRepository.findByOrigemAndDestino(origem, destino)
 				.orElseThrow(() -> new Exception("Câmbio não encontrado para esta origem e destino"));
 		cambio.setValorConvertido(valor * cambio.getFator());
-		cambio.setAmbiente("Cambio-Service run in port: " + porta);
+		cambio.setAmbiente("Cambio-Service run in port: " + porta + "(From DB)");
 		return ResponseEntity.ok(cambio);
 	}
 
 	public CambioEntity getCambioFromBC(String origem, String destino) {
-		// Aqui vamos criar um novo objeto "cambio" pois nesse momento não vamos buscar
-		// do banco de dados
 		CambioEntity cambio = new CambioEntity();
 		cambio.setOrigem(origem);
 		cambio.setDestino(destino);
@@ -71,9 +74,6 @@ public class CambioController {
 		if (destino.equals("BRL")) {
 			fator = cotacaoOrigem.getValue().get(0).getCotacaoVenda();
 		} else {
-			// Se o destino NÃO é o Real (BRL), então temos que fazer o cálculo,
-			// já que a API do Banco Central retorna sempre a cotação em relação a moeda
-			// brasileira
 			CotacaoResponse cotacaoDestino = cotacaoClient.getCotacao(destino, "10-10-2024");
 			fator = cotacaoOrigem.getValue().get(0).getCotacaoVenda()
 					/ cotacaoDestino.getValue().get(0).getCotacaoVenda();
